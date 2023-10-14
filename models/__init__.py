@@ -1,6 +1,9 @@
-#!/usr/bin/python3
-"""Create a unique FileStorage instance for your application"""
+#!/usr/bin/env python3
+"""
+Script to initialize a FileStorage instance and reload stored data.
+"""
 from models.engine.file_storage import FileStorage
 
-strg = FileStorage()
-strg.reload()
+
+storage = FileStorage()
+storage.reload()
