@@ -215,6 +215,18 @@ class HBNBCommand(cmd.Cmd):
                     words[0] + '.')]
             print(len(matches))
 
+    def parse(line, sep):
+        """
+        sould splite string consider comma
+        """
+        if sep == ',':
+            a = ''
+            for av in line.split(sep):
+                a += av
+            args = shlex.split(a)
+        elif sep == ' ':
+            args = line.split(sep)
+        return args, len(args)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
