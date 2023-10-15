@@ -32,7 +32,7 @@ class FileStorage:
             dict: A dictionary containing all serialized objects.
 
         """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """
@@ -41,17 +41,18 @@ class FileStorage:
         Args:
             obj: An instance of a class to be added.
         """
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        self.__objects[key] = obj
+        if obj:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            FileStorage.__objects[key] = obj
 
     def save(self):
         """
         Save the serialized objects to the JSON file.
         """
         save_obj = {}
-        for key, value in self.__objects.items():
-            save_obj[key] = value.to_dict()
-        with open(self.__file_path, "w", encoding="utf-8") as fd:
+        for key, value in FileStorage.__objects.items():
+            save_obj[key] = value.to_dict().copy()
+        with open(FileStorage.__file_path, "w", encoding="utf-8") as fd:
             json.dump(save_obj, fd)
 
     def reload(self):
@@ -59,10 +60,13 @@ class FileStorage:
         Load serialized data from the JSON file and create instances.
         """
         try:
-            with open(self.__file_path, encoding="utf-8") as fd:
+            with open(FileStorage.__file_path, encoding="utf-8") as fd:
                 json_fvar = json.load(fd)
 
             for key, value in json_fvar.items():
-                self.new(eval(key.split(".")[0])(**value))
+                className = value.get('__class__')
+                obj = eval(className + '(**value)')
+                FileStorage.__objects[key] = obj
+
         except FileNotFoundError:
             pass
