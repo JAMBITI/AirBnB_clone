@@ -148,7 +148,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             else:
                 sellectLine = [str(obj) for key, obj in storage.all().items()
-                if type(obj).__name__ == items[0]]
+                      if type(obj).__name__ == items[0]]
                 print(sellectLine)
         else:
             add_new_list = [str(obj) for key, obj in storage.all().items()]
