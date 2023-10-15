@@ -94,28 +94,22 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print('** no instance found **')
 
-    def do_all(self, args):
+    def do_all(self, line):
         """
         sould display string representations of all instances.
 
         Args:
-            line (str, opt): The user input containing optional class name.
+            line (str, opt): string, options
         """
-        arguments = args.split()
-        objects = models.storage.all()
-        new_list = []
-
-        if len(arguments) == 0:
-            for obj in objects.values():
-                new_list.append(obj.__str__())
-            print(new_list)
-        elif arguments[0] not in HBNBCommand.cls:
-            print("** class doesn't exist **")
-        else:
-            for obj in objects.values():
-                if obj.__class__.__name__ == arguments[0]:
-                    new_list.append(obj.__str__())
-            print(new_list)
+        store = storage.all()
+        if not line:
+            print([str(x) for x in store.values()])
+            return
+        args = line.split()
+        if (self.my_errors(line, 1) == 1):
+            return
+        print([str(v) for v in store.values()
+               if v.__class__.__name__ == args[0]])
 
     def do_update(self, args):
         """
