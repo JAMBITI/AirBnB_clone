@@ -228,5 +228,6 @@ class HBNBCommand(cmd.Cmd):
             args = line.split(sep)
         return args, len(args)
 
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
