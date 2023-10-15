@@ -94,23 +94,6 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print('** no instance found **')
 
-    def do_all(self, line):
-        """
-        sould display string representations of all instances.
-
-        Args:
-            line (str, opt): string, options
-        """
-        store = storage.all()
-        if not line:
-            print([str(x) for x in store.values()])
-            return
-        args = line.split()
-        if (self.my_errors(line, 1) == 1):
-            return
-        print([str(v) for v in store.values()
-               if v.__class__.__name__ == args[0]])
-
     def do_update(self, args):
         """
         sould update an instance attribute's value
@@ -118,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
         Args:
             line(args): args
         """
-        objects = models.storage.all()
+        getAll = models.storage.all()
         arguments = args.split(" ")
 
         if len(arguments) == 0:
@@ -133,13 +116,13 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
         else:
             key_find = arguments[0] + '.' + arguments[1]
-            obj = objects.get(key_find, None)
+            pointer = getAll.get(key_find, None)
 
-            if not obj:
+            if not pointer:
                 print("** no instance found **")
                 return
 
-            setattr(obj, arguments[2], arguments[3].lstrip('"').rstrip('"'))
+            setattr(pointer, arguments[2], arguments[3].lstrip('"').rstrip('"'))
             models.storage.save()
 
     def check_class_name(self, name=""):
@@ -193,6 +176,44 @@ class HBNBCommand(cmd.Cmd):
         sould do nothing when an empty line is entered.
         """
         pass
+
+    def do_all(self, args):
+        """
+        sould display string representations of all instances.
+
+        Args:
+            line (str, opt): The user input containing optional class name.
+        """
+        arguments = args.split()
+        objects = models.storage.all()
+        new_list = []
+
+        if len(arguments) == 0:
+            for obj in objects.values():
+                new_list.append(obj.__str__())
+            print(new_list)
+        elif arguments[0] not in HBNBCommand.cls:
+            print("** class doesn't exist **")
+        else:
+            for obj in objects.values():
+                if obj.__class__.__name__ == arguments[0]:
+                    new_list.append(obj.__str__())
+            print(new_list)
+
+    def do_count(self, line):
+        """
+        sould count total
+        """
+        words = line.split(' ')
+        if not words[0]:
+            print("** class name missing **")
+        elif words[0] not in storage.classes():
+            print("** class doesn't exist **")
+        else:
+            matches = [
+                k for k in storage.all() if k.startswith(
+                    words[0] + '.')]
+            print(len(matches))
 
 
 if __name__ == '__main__':
