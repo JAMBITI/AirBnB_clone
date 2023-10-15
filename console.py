@@ -122,7 +122,8 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
                 return
 
-            setattr(pointer, arguments[2], arguments[3].lstrip('"').rstrip('"'))
+            setattr(pointer, arguments[2], arguments[3].lstrip('"')
+                    .rstrip('"'))
             models.storage.save()
 
     def check_class_name(self, name=""):
