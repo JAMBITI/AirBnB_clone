@@ -1,62 +1,68 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
-Serializes instances to JSON file and deserializes JSON file to instances
+Module for the class FileStorage
 """
 import json
+from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
-from models.place import Place
 from models.review import Review
-from datetime import datetime
 
 
 class FileStorage:
     """
-    Serializes instances to a JSON file and ...
+    Class to manage serialization and deserialization of objects.
+
+    Attributes:
+        __file_path (str): The path to the JSON file.
+        __objects (dict): A dictionary containing all serialized objects.
     """
-    __file_path = 'file.json'
+
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        return FileStorage.__objects
+        """
+        Retrieve the dictionary of all serialized objects.
+
+        Returns:
+            dict: A dictionary containing all serialized objects.
+
+        """
+        return self.__objects
 
     def new(self, obj):
-        k = type(obj).__name__ + '.' + obj.id
-        FileStorage.__objects[k] = obj
+        """
+        Add a new serialized object to the dictionary.
+
+        Args:
+            obj: An instance of a class to be added.
+        """
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        self.__objects[key] = obj
 
     def save(self):
         """
-        serialising FileStroage.__objects
+        Save the serialized objects to the JSON file.
         """
-        with open(FileStorage.__file_path, 'w+') as i:
-            dicobj = {}
-            for k, val in FileStorage.__objects.items():
-                dicobj[k] = val.to_dict()
-            json.dump(dicobj, i)
+        save_obj = {}
+        for key, value in self.__objects.items():
+            save_obj[key] = value.to_dict()
+        with open(self.__file_path, "w", encoding="utf-8") as fd:
+            json.dump(save_obj, fd)
 
     def reload(self):
         """
-        deserializes instances from json file
+        Load serialized data from the JSON file and create instances.
         """
         try:
-            with open(FileStorage.__file_path, 'r') as i:
-                dictobj = json.loads(i.read())
-                from models.base_model import BaseModel
-                Classes = {
-                    'BaseModel': BaseModel,
-                    'User': User,
-                    'Place': Place,
-                    'State': State,
-                    'City': City,
-                    'Amenity': Amenity,
-                    'Review': Review
-                }
-                for k, val in dicobj.items():
-                    clas = val.get('__class__')
-                    if clas in Classes:
-                        FileStorage._objects[k] = Classes[clas](**val)
+            with open(self.__file_path, encoding="utf-8") as fd:
+                json_fvar = json.load(fd)
 
+            for key, value in json_fvar.items():
+                self.new(eval(key.split(".")[0])(**value))
         except FileNotFoundError:
             pass
