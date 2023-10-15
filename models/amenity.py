@@ -14,3 +14,7 @@ class Amenity(BaseModel):
     """
 
     name = ""
+
+        def __init__(self, *args, **kwargs):
+        """ Constructor """
+        super().__init__(self, *args, **kwargs)
