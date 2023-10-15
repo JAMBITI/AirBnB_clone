@@ -3,6 +3,7 @@
 objects in the HBnB clone"""
 
 import cmd
+import models
 from models.base_model import BaseModel
 from models import storage
 import re
@@ -142,17 +143,21 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, line):
         """
         should return all itmes"""
-        if line != "":
-            items = line.split(' ')
-            if items[0] not in storage.classes():
-                print("** class doesn't exist **")
-            else:
-                sellectLine = [str(obj) for key, obj in storage.all().items()
-                      if type(obj).__name__ == items[0]]
-                print(sellectLine)
+        item = line.split()
+        store = models.storage.all()
+        create_new_list = []
+
+        if len(item) == 0:
+            for obj in store.values():
+                create_new_list.append(obj.__str__())
+            print(create_new_list)
+        elif item[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
         else:
-            add_new_list = [str(obj) for key, obj in storage.all().items()]
-            print(add_new_list)
+            for obj in store.values():
+                if obj.__class__.__name__ == item[0]:
+                    create_new_list.append(obj.__str__())
+            print(create_new_list)
 
     def do_count(self, line):
         """
