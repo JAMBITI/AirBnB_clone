@@ -29,11 +29,11 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = '(hbnb) '
-    cls = [ "Amenity", "BaseModel", "City", "Place", "Review", "State", "User"]
+    cls = ["Amenity", "BaseModel", "City", "Place", "Review", "State", "User"]
 
     def do_create(self, args):
         """
-        sould create a new instance of a specified class and save it to storage.
+        sould create a new instance of a specified class and save it
 
         Args:
             line (str): The user input string containing the class name.
@@ -119,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, args):
         """
-        sould update an instance attribute's value by class name and instance ID.
+        sould update an instance attribute's value
 
         Args:
             line(args): args
@@ -201,4 +201,6 @@ class HBNBCommand(cmd.Cmd):
         pass
 
 if __name__ == '__main__':
+
+
     HBNBCommand().cmdloop()
