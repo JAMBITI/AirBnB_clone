@@ -10,7 +10,11 @@ class State(BaseModel):
     class State
 
     Attributes:
-        name (str): name of the state
+        name (str): string
     """
 
     name = ""
+
+    def __init__(self, *args, **kwargs):
+        """initializes State"""
+        super().__init__(*args, **kwargs)

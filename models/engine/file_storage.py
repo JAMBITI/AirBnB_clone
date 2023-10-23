@@ -23,6 +23,8 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+    models = ('BaseModel', 'Amenity', 'City', 'Place', 'Review', 'State',
+              'User')
 
     def all(self):
         """
@@ -32,7 +34,7 @@ class FileStorage:
             dict: A dictionary containing all serialized objects.
 
         """
-        return self.__objects
+        return (self.__objects)
 
     def new(self, obj):
         """
@@ -41,8 +43,9 @@ class FileStorage:
         Args:
             obj: An instance of a class to be added.
         """
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        self.__objects[key] = obj
+        if obj:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            self.__objects[key] = obj
 
     def save(self):
         """
@@ -50,7 +53,7 @@ class FileStorage:
         """
         save_obj = {}
         for key, value in self.__objects.items():
-            save_obj[key] = value.to_dict()
+            save_obj[key] = value.to_dict().copy()
         with open(self.__file_path, "w", encoding="utf-8") as fd:
             json.dump(save_obj, fd)
 
@@ -63,6 +66,9 @@ class FileStorage:
                 json_fvar = json.load(fd)
 
             for key, value in json_fvar.items():
-                self.new(eval(key.split(".")[0])(**value))
+                className = value.get('__class__')
+                obj = eval(className + '(**value)')
+                self.__objects[key] = obj
+
         except FileNotFoundError:
             pass

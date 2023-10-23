@@ -10,7 +10,11 @@ class Amenity(BaseModel):
     class Amenity
 
     Attributes:
-        name (str): The name of the amenity.
+        name (str): string
     """
 
     name = ""
+
+    def __init__(self, *args, **kwargs):
+        """initializes State"""
+        super().__init__(*args, **kwargs)

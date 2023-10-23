@@ -77,7 +77,7 @@ class TestFileStorage(unittest.TestCase):
 
         new_storage = FileStorage()
         new_storage.reload()
-        key = "{}.{}".format(base_model.__class__.__name__, base_model.id)
+        key = "{}.{}".format(base_model.__class__.__name__,base_model.id)
         self.assertIn(key, self.storage._FileStorage__objects)
         reloaded_ins = new_storage.all()[key]
 
@@ -104,7 +104,8 @@ class TestFileStorage(unittest.TestCase):
         self.storage.reload()
 
         self.assertEqual(
-            self.storage.all()[f"{BaseModel.__name__}.{base_model.id}"].to_dict(),
+            self.storage.all()[f"{BaseModel.__name__}.
+                               {base_model.id}"].to_dict(),
             base_model.to_dict(),
         )
         self.assertEqual(
@@ -124,11 +125,13 @@ class TestFileStorage(unittest.TestCase):
             city_model.to_dict(),
         )
         self.assertEqual(
-            self.storage.all()[f"{Amenity.__name__}.{amenity_model.id}"].to_dict(),
+            self.storage.all()[f"{Amenity.__name__}
+                               .{amenity_model.id}"].to_dict(),
             amenity_model.to_dict(),
         )
         self.assertEqual(
-            self.storage.all()[f"{Review.__name__}.{review_model.id}"].to_dict(),
+            self.storage.all()[f"{Review.__name__}
+                               .{review_model.id}"].to_dict(),
             review_model.to_dict(),
         )
 
